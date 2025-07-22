@@ -21,3 +21,14 @@ Run the following script to test the example, where 15 agents will randomly choo
 ```bash
 ./scripts/run_transit_example.sh
 ```
+
+## Visualization 
+
+We provide a tool to visualize the simulation ouputs in HTML format. You can run the following command to generate the HTML demo:
+
+```bash
+cd tools
+python ViCo/tools/make_html_demo.py -d output/<scene>_<config>/<agent_type>
+python -m http.server
+```
+Note that you need a template HTML file `template.html` in the `tools` directory. You can find an example template already provided in `tools/template.html`.
