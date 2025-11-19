@@ -73,7 +73,7 @@ const isActive = (link: string) => {
         .replace(/-+/g, '-');
     }
 
-    const headings = Array.from(docsContent.querySelectorAll('h2, h3'));
+    const headings = Array.from(docsContent.querySelectorAll('h2'));
     const usedIds = new Set();
 
     headings.forEach((heading) => {
