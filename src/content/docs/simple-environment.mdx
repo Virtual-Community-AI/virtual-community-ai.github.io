@@ -1,0 +1,107 @@
+---
+title: "Simple Environment"
+description: "Testing the Virtual Community simulation in a simple environment"
+order: 5
+author: "Virtual Community Team"
+publishedDate: 2025-09-08
+lastModified: 2025-09-08
+featured: true
+difficulty: "beginner"
+draft: false
+---
+
+## Simple Environment
+Although Virtual Community is designed for simulating large-scale communities in open worlds, we also provide lightweight simulation environments for quick testing and exploration.
+
+## Running a Demo Environment
+Several demo configurations for simple environments are available under `ViCo/assets/scenes/demos`.  
+To run one of them, use:
+
+```bash
+./scripts/run_simple_env.sh
+````
+
+You can also modify the `--config_path` in this script to point to other demo configurations.
+For higher-quality rendering, add the `--use_luisa_renderer` flag.
+
+## Creating a New Demo Configuration
+
+You can create a new demo configuration by following the examples in `ViCo/assets/scenes/demos`.
+Here is one example:
+
+```json
+{
+    "sim_name": "Simple_agent_num_2",
+    "scene": "ViCo/scene/demo/DETROIT_ok/DETROIT_stage2_cut_with_objects_basic.glb",
+    "scene_offset": [0.0, 0.0, 26.3],
+    "height_field": "ViCo/scene/demo/DETROIT_ok/height_field.npz",
+    "agent_names": [
+        "Alex Jefferson",
+        "Brian Carter"
+    ],
+    "step": 0,
+    "curr_time": "October 1, 2024, 09:00:00",
+    "start_time": "October 1, 2024, 09:00:00",
+    "agent_poses": [
+        [173.0, 6.5, 107.0, 0.0, 0.0, 0.0],
+        [172.0, 7.5, 107.0, 0.0, 0.0, 0.0]
+    ],
+    "num_agents": 2,
+    "sec_per_step": 1,
+    "agent_skins": [
+        "ViCo/avatars/models/mixamo_Alex_Jefferson.glb",
+        "ViCo/avatars/models/mixamo_Brian_Carter.glb"
+    ],
+    "dt_control": [1.0, 1.0],
+    "dt_visual_obs": [1.0, 1.0],
+    "camera_config": [
+        {
+            "pos": [175.12438844417848, 5.75085496182845, 108.61468966186943],
+            "lookat": [173.12438844417848, 7.75085496182845, 107.61468966186943]
+        }
+    ],
+    "agent_actions": [
+        [{"type": "move_forward", "arg1": 1.0}],
+        [{"type": "move_forward", "arg1": 1.0}]
+    ]
+}
+```
+
+### Explanation of Fields
+
+* `sim_name`: Unique identifier for the configuration.
+* `scene`: Path to the 3D scene (GLB file) or an indoor scene ID from `ViCo/modules/indoor_scenes/scenes` (without the `.json` suffix).
+* `scene_offset`: Offset to apply when loading the scene.
+* `height_field`: Height field for avatars. Optional if not available.
+* `agent_poses`: Initial positions (first 3 dimensions) and rotations (last 3 dimensions, Euler angles).
+* `agent_skins`: Agent skins, selectable from `ViCo/avatars/models/`.
+* `camera_config`: List of camera configurations for video recording (supports multiple).
+* `agent_actions`: Sequence of actions for each agent. Each agent executes its actions in order.
+  Format:
+
+  ```json
+  {
+      "type": "<action_type>",
+      "arg1": ...
+  }
+  ```
+
+### Available Actions
+
+Below is the list of supported action types and their arguments (in parentheses):
+
+* `move_forward` (arg1: distance)
+* `teleport` (arg1: \[x, y, z] position)
+* `turn_left` (arg1: angle in degrees)
+* `turn_right` (arg1: angle in degrees)
+* `look_at` (arg1: \[x, y, z] position)
+* `sleep`
+* `wake`
+* `pick` (arg1: 0 = left hand, 1 = right hand; arg2: \[x, y, z] position)
+* `put` (arg1: 0 = left hand, 1 = right hand)
+* `stand`
+* `sit` (arg1: \[x, y, z] position)
+* `drink` (arg1: 0 = left hand, 1 = right hand)
+* `eat` (arg1: 0 = left hand, 1 = right hand)
+* `wait`
+* `play_animation` (arg1: animation name, selectable from [motion list](https://github.com/Virtual-Community-AI/virtual-community-ai.github.io/tree/main/src/assets/text/motion.txt))

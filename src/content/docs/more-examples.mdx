@@ -1,0 +1,34 @@
+---
+title: "More Examples"
+description: "Additional examples for you to explore Virtual Community"
+order: 6
+author: "Virtual Community Team"
+publishedDate: 2025-06-29
+lastModified: 2025-06-29
+featured: true
+difficulty: "beginner"
+draft: false
+---
+
+## Transit
+
+Virtual Community offers various transit options—such as bus and bicycles—for agents to commute.
+
+### Run
+
+Run the following script to test the example, where 15 agents will randomly choose different transit options to navigate to different goal places.
+
+```bash
+./scripts/run_transit_example.sh
+```
+
+## Visualization 
+
+We provide a tool to visualize the simulation ouputs in HTML format. You can run the following command to generate the HTML demo:
+
+```bash
+cd tools
+python ViCo/tools/make_html_demo.py -d output/<scene>_<config>/<agent_type>
+python -m http.server
+```
+Note that you need a template HTML file `template.html` in the `tools` directory. You can find an example template already provided in `tools/template.html`.
