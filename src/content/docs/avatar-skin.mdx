@@ -1,0 +1,141 @@
+
+---
+title: "Avatars in Virtual Community"
+description: "How to process and import Mixamo characters and skins for Virtual Community simulator"
+order: 5
+author: "Virtual Community Team"
+publishedDate: 2025-06-20
+lastModified: 2025-06-20
+difficulty: "beginner"
+draft: false
+---
+
+This page explains how to process and import avatar skins into Virtual Community using Mixamo or Avatar SDK, and lists the supported avatar actions and APIs.
+
+## Mixamo Avatar Skins
+
+### 1. Download FBX model from Mixamo
+
+- Go to [Mixamo](https://www.mixamo.com), choose your character.
+- Download as **FBX Binary (.fbx)** in **T-pose**.
+
+### 2. Process FBX model with Blender
+
+#### a. Import the FBX Model
+
+1. Open Blender.
+2. Select `File -> Import -> FBX (.fbx)` and choose your downloaded file.
+
+#### b. Merge Meshes (if multiple)
+
+- In Blender's Outliner or 3D Viewport, select all mesh objects (hold `Shift`).
+- Right-click and select **Join** (`Ctrl+J`).
+- *(Skip if only one mesh.)*
+
+#### c. Reduce Polygon Count
+
+- Select merged mesh.
+- Go to **Modifiers**, add **Decimate** modifier.
+- Set **Collapse** ratio to `0.15 ~ 0.2` to bring face count to ~4k–6k.
+
+#### d. Export to GLB
+
+1. Go to `File -> Export -> glTF 2.0 (.glb/.gltf)`.
+2. Ensure:
+   - Uncheck `Transform -> +Y Up`
+   - Check `Geometry -> Apply Modifiers`
+   - Uncheck `Animation -> Animation` and `Shape Keys`
+3. Save as `.glb`.
+
+#### e. (Optional) Reduce Texture Resolution
+
+- Use [gltf-transform](https://gltf-transform.dev/) to lower texture size for performance:
+  ```bash
+  gltf-transform resize --width 1024 --height 1024 input.glb output.glb
+  ```
+
+
+### 3. Troubleshooting
+
+#### "IndexError: index X is out of bounds for axis 0..."
+
+- Example error:
+  ```python
+  IndexError: index 194 is out of bounds for axis 0 with size 65
+  ```
+- Solution: Open and re-save the GLB with a 3D viewer such as **Gestaltor** to ensure a clean joint index mapping.
+
+#### Skin & Motion Joint Mismatch
+
+- When exporting motion FBX from Mixamo, choose a **standard human rig** such as "Jackie" or "Michelle" for best compatibility.
+
+
+## Avatar SDK Skins
+
+Coming soon. We will provide step‑by‑step instructions for generating a personalized avatar with Avatar SDK.
+
+
+## Load Avatars in Virtual Community
+
+When loading avatars in the simulator, you will use the following parameters:
+
+- **motion_data_path:** Path to motion `.pkl`
+- **skin_options:**
+  - `glb_path`: Your exported `.glb` file
+  - `euler`, `pos`: (For pose/orientation; optional or advanced)
+- **ego_view_options:** (Optional) 
+  - `res`, `fov`
+- **frame_ratio:** Frame update ratio (for stepping)
+- **terrain_height_path:** (Optional; auto-height support)
+
+
+## Supported Avatar Actions
+
+### Core movement and interaction
+
+- **Move forward**: `move(distance[, speed=1])`
+- **Turn left**: `turn_left(angle[, turn_frame_limit=15])`
+- **Turn right**: `turn_right(angle[, turn_frame_limit=15])`
+- **Reach (touch/press)**: `reach(hand, object)`
+- **Pick**: `pick(hand, object)`
+- **Put**: `put(hand[, position, rotation])`
+- **Throw**: `throw(hand[, orientation])`
+- **Open**: `open(hand, object)`
+- **Close**: `close(hand, object)`
+- **Sit**: `sit([object, position])`
+- **Stand up**: `stand_up()`
+- **Drink**: `drink(hand)`
+- **Eat**: `eat(hand)`
+- **Play**: `play(hand, duration)`
+
+### Vehicle interactions
+
+- **Bus**: `enter_bus(bus)`, `exit_bus()`
+- **Bicycle**: `enter_bike(hand_id, bike)`, `exit_bike(hand_id)`
+- **Car**: `enter_car(hand_id, car)`, `exit_car(hand_id)`
+
+### Avatar APIs
+
+* `reset(global_trans, global_rot)`
+* `spare()`: Return True if avatar is idle
+
+  * `from ViCo.modules.avatar.utils import ActionStatus`
+* `get_global_xy()`
+* `get_global_height()`
+* `get_global_pose()`: Returns `[x, y, z, r, p, y]`
+* `set_global_height(height)`
+* `render_ego_view(rotation_offset, depth, segmentation)`
+
+### Adding Your Own Motions
+
+1. Download motion FBX into:
+   `Genesis/genesis/assets/motions/`
+
+2. Convert to pickle:
+
+   ```bash
+   python tools/misc/convert_fbx.py -e Genesis/genesis/assets/motions/ -o Genesis/genesis/assets/motions/
+   ```
+
+3. Add your motions under:
+   `Genesis/genesis/assets/avatars/motions`
