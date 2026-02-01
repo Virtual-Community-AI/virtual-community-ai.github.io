@@ -1,3 +1,14 @@
----
-return Astro.redirect('/docs/getting-started');
----
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0; url=/docs/getting-started" />
+    <link rel="canonical" href="/docs/getting-started" />
+    <meta name="robots" content="noindex" />
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <p>Redirecting to <a href="/docs/getting-started">/docs/getting-started</a>…</p>
+    <script>location.replace("/docs/getting-started");</script>
+  </body>
+</html>
