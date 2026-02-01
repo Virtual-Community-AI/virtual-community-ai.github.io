@@ -55,3 +55,54 @@ const isActive = (link: string) => {
     </div>
   </div>
 </aside>
+
+<script>
+  // Build a simple hierarchical TOC (h2/h3) under the active doc link
+  document.addEventListener('DOMContentLoaded', () => {
+    const docsContent = document.querySelector('.docs-content');
+    const tocContainer = document.getElementById('toc-list');
+    if (!docsContent || !tocContainer) return;
+
+    // Utility: create URL-friendly slug
+    function slugify(text) {
+      return text
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+    }
+
+    const headings = Array.from(docsContent.querySelectorAll('h2, h3'));
+    const usedIds = new Set();
+
+    headings.forEach((heading) => {
+      const level = heading.tagName.toLowerCase();
+      const text = heading.textContent?.trim() || '';
+      if (!text) return;
+
+      // Ensure the heading has a unique id
+      let id = heading.getAttribute('id') || slugify(text);
+      let uniqueId = id;
+      let counter = 2;
+      while (usedIds.has(uniqueId)) {
+        uniqueId = `${id}-${counter++}`;
+      }
+      usedIds.add(uniqueId);
+      heading.setAttribute('id', uniqueId);
+
+      // Create list item
+      const li = document.createElement('li');
+      li.className = level === 'h2' ? 'text-slate-700' : 'text-slate-600 ml-3';
+
+      const a = document.createElement('a');
+      a.href = `#${uniqueId}`;
+      a.textContent = text;
+      a.className =
+        'block px-2 py-1 text-fluid-sm rounded hover:text-slate-900 hover:bg-slate-100 transition-colors';
+
+      li.appendChild(a);
+      tocContainer.appendChild(li);
+    });
+  });
+</script>
