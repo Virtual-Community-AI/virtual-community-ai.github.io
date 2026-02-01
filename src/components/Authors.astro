@@ -93,12 +93,22 @@ function getAuthorImage(photoName: string) {
     <!-- School Logos -->
     <div class="mt-12 flex justify-center items-center gap-12">
       <sup class="text-sm text-gray-500">1</sup>
+
+      <div class="flex items-center gap-1">
+        <Image
+          src={imageMap["ibm"]}
+          alt="IBM"
+          width={250}
+          height={250}
+          class="object-contain"
+        />
+      </div>
       <div class="flex items-center gap-1">
         <Image
           src={imageMap["umass"]}
           alt="UMass"
-          width={300}
-          height={300}
+          width={250}
+          height={250}
           class="object-contain"
         />
       </div>
@@ -107,8 +117,8 @@ function getAuthorImage(photoName: string) {
         <Image
           src={imageMap["jhu"]}
           alt="JHU"
-          width={300}
-          height={300}
+          width={250}
+          height={250}
           class="object-contain"
         />
       </div>
